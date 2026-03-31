@@ -130,73 +130,20 @@ function showMasterTab(type) {
   document.querySelectorAll('.master-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.master-content').forEach(c => c.classList.remove('active'));
 
-  document.querySelector(`.master-tab[onclick="showMasterTab('${type}')"]`).classList.add('active');
-  document.getElementById('tab-' + type).classList.add('active');
+  document.querySelector(`.master-tab[onclick="showMasterTab('${type}')"]`)
+    .classList.add('active');
+  document.getElementById('tab-' + type)
+    .classList.add('active');
 }
 
-/* ===== Storage Helpers ===== */
-function load(k){ return JSON.parse(localStorage.getItem(k) || "[]"); }
-function save(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
+/* =====================================================
+   ✅ Location（只保留 Modal 版本）
+   ===================================================== */
 
-/* ===== Location ===== */
-let locations = load("locations");
-function addLocation(){
-  locations.push({id:Date.now(), code:locCode.value, name:locName.value, active:true});
-  save("locations", locations);
-  locCode.value = locName.value = "";
-  renderLocations();
-}
-function renderLocations(){
-  locList.innerHTML = "";
-  locations.forEach(l => locList.innerHTML += `<li>${l.code} - ${l.name}</li>`);
-}
-renderLocations();
-
-/* ===== Department ===== */
-let departments = load("departments");
-function addDepartment(){
-  departments.push({id:Date.now(), code:deptCode.value, name:deptName.value, active:true});
-  save("departments", departments);
-  deptCode.value = deptName.value = "";
-  renderDepartments();
-}
-function renderDepartments(){
-  deptList.innerHTML = "";
-  departments.forEach(d => deptList.innerHTML += `<li>${d.code} - ${d.name}</li>`);
-}
-renderDepartments();
-
-/* ===== Job ===== */
-let jobs = load("jobs");
-function addJob(){
-  jobs.push({id:Date.now(), code:jobCode.value, name:jobName.value, active:true});
-  save("jobs", jobs);
-  jobCode.value = jobName.value = "";
-  renderJobs();
-}
-function renderJobs(){
-  jobList.innerHTML = "";
-  jobs.forEach(j => jobList.innerHTML += `<li>${j.code} - ${j.name}</li>`);
-}
-renderJobs();
-
-/* ===== Shift ===== */
-let shifts = load("shifts");
-function addShift(){
-  shifts.push({id:Date.now(), code:shiftCode.value, name:shiftName.value, active:true});
-  save("shifts", shifts);
-  shiftCode.value = shiftName.value = "";
-  renderShifts();
-}
-function renderShifts(){
-  shiftList.innerHTML = "";
-  shifts.forEach(s => shiftList.innerHTML += `<li>${s.code} - ${s.name}</li>`);
-}
-renderShifts();
-  /* ===== Location Data ===== */
+/* Data */
 let locations = JSON.parse(localStorage.getItem("locations")) || [];
 
-/* ===== Modal Control ===== */
+/* Modal Control */
 function openLocationModal() {
   document.getElementById("locationModal").style.display = "flex";
 }
@@ -206,7 +153,7 @@ function closeLocationModal() {
   document.getElementById("locName").value = "";
 }
 
-/* ===== Save Location ===== */
+/* Save Location */
 function saveLocation() {
   const company = document.getElementById("locCompany").value;
   const name = document.getElementById("locName").value.trim();
@@ -228,7 +175,7 @@ function saveLocation() {
   renderLocationList();
 }
 
-/* ===== Render List ===== */
+/* Render List */
 function renderLocationList() {
   const ul = document.getElementById("locationList");
   ul.innerHTML = "";
