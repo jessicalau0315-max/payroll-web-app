@@ -243,6 +243,9 @@ function showMasterTab(type) {
     }
   }
 
+  localStorage.setItem("ACTIVE_MASTER_TAB", type);
+}
+
   var content = document.getElementById(tabId);
   if (content) {
     content.classList.add("active");
@@ -687,7 +690,15 @@ function renderJobTable() {
 
 /* --- Init --- */
 renderJobTable();
- 
+
+
+    
+/ ===== Restore active tab on refresh =====
+var lastTab = localStorage.getItem("ACTIVE_MASTER_TAB");
+if (lastTab) {
+  showMasterTab(lastTab);
+}
+    
 </script> 
 
 </body>
