@@ -98,15 +98,67 @@
   </div>
 </div>
 
-    <!-- ===== Department ===== -->
-    <div id="tab-department" class="master-content">
-      <h2>🏢 部門（Department）</h2>
-      <input id="deptCode" placeholder="Code (例如: HR)">
-      <input id="deptName" placeholder="名稱">
-      <button onclick="addDepartment()">新增</button>
-      <ul id="deptList"></ul>
+<!-- ===== Department ===== -->
+<div id="tab-department" class="master-content">
+
+  <div style="display:flex; align-items:center; justify-content:space-between;">
+    <h2 style="margin:0;">🏢 部門（Department）</h2>
+    <button class="add-btn" onclick="openDepartmentModal()">+</button>
+  </div>
+
+  <table class="table" style="margin-top:12px;">
+    <thead>
+      <tr>
+        <th>公司名稱</th>
+        <th>工作地點</th>
+        <th>部門代碼</th>
+        <th>部門名稱</th>
+        <th>狀態</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody id="departmentTableBody"></tbody>
+  </table>
+
+</div>
+
+    <!-- ===== Department Modal ===== -->
+<div id="departmentModal" class="modal-overlay">
+  <div class="modal">
+
+    <div class="modal-header">
+      <h3 id="departmentModalTitle">新增部門</h3>
+      <span class="modal-close" onclick="closeDepartmentModal()">✕</span>
     </div>
 
+    <div class="modal-body">
+      <label>公司名稱</label>
+      <select id="deptCompany">
+        <option value="KLN Logistics (HK) LTD.">
+          KLN Logistics (HK) LTD.
+        </option>
+      </select>
+
+      <label>工作地點</label>
+      <select id="deptLocation"></select>
+
+      <label>部門代碼（只限英文及數字）</label>
+      <input id="deptCode">
+
+      <label>部門名稱</label>
+      <input id="deptName">
+
+      <input type="hidden" id="deptEditId">
+    </div>
+
+    <div class="modal-footer">
+      <button onclick="closeDepartmentModal()">取消</button>
+      <button onclick="saveDepartment()">儲存</button>
+    </div>
+
+  </div>
+</div>
+    
     <!-- ===== Job ===== -->
     <div id="tab-job" class="master-content">
       <h2>🛠 工種（Job Type）</h2>
