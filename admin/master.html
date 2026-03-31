@@ -193,6 +193,55 @@ function renderShifts(){
   shifts.forEach(s => shiftList.innerHTML += `<li>${s.code} - ${s.name}</li>`);
 }
 renderShifts();
+  /* ===== Location Data ===== */
+let locations = JSON.parse(localStorage.getItem("locations")) || [];
+
+/* ===== Modal Control ===== */
+function openLocationModal() {
+  document.getElementById("locationModal").style.display = "flex";
+}
+
+function closeLocationModal() {
+  document.getElementById("locationModal").style.display = "none";
+  document.getElementById("locName").value = "";
+}
+
+/* ===== Save Location ===== */
+function saveLocation() {
+  const company = document.getElementById("locCompany").value;
+  const name = document.getElementById("locName").value.trim();
+
+  if (!name) {
+    alert("請輸入工作地點");
+    return;
+  }
+
+  locations.push({
+    id: Date.now(),
+    company,
+    name,
+    active: true
+  });
+
+  localStorage.setItem("locations", JSON.stringify(locations));
+  closeLocationModal();
+  renderLocationList();
+}
+
+/* ===== Render List ===== */
+function renderLocationList() {
+  const ul = document.getElementById("locationList");
+  ul.innerHTML = "";
+
+  locations.forEach(loc => {
+    const li = document.createElement("li");
+    li.innerText = `${loc.company} - ${loc.name}`;
+    ul.appendChild(li);
+  });
+}
+
+/* Init */
+renderLocationList();
 </script>
 
 </body>
