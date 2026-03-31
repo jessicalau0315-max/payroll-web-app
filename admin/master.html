@@ -240,6 +240,7 @@ function renderCompanyList() {
 }
 
 /* --- Save location --- */
+
 function saveLocation() {
   var companyName = document.getElementById("locCompanyInput").value.trim();
   var locationName = document.getElementById("locNameInput").value.trim();
@@ -266,17 +267,64 @@ function saveLocation() {
     localStorage.setItem("companies", JSON.stringify(companies));
   }
 
-  locations.push({
-    id: new Date().getTime(),
-    companyId: company.id,
-    companyName: company.name,
-    locationName: locationName
-  });
+  // ✅ 如果係 edit
+  if (window.editLocationId) {
+    for (var j = 0; j < locations.length; j++) {
+      if (locations[j].id === window.editLocationId) {
+        locations[j].companyId = company.id;
+        locations[j].companyName = company.name;
+        locations[j].locationName = locationName;
+        break;
+      }
+    }
+    window.editLocationId = null;
+  } else {
+    // ✅ 新增
+    locations.push({
+      id: new Date().getTime(),
+      companyId: company.id,
+      companyName: company.name,
+      locationName: locationName,
+      active: true
+    });
+  }
 
   localStorage.setItem("locations", JSON.stringify(locations));
   closeLocationModal();
   renderLocationTable();
 }
+
+    
+    function editLocation(id) {
+  for (var i = 0; i < locations.length; i++) {
+    if (locations[i].id === id) {
+      var l = locations[i];
+      document.getElementById("locCompanyInput").value =
+        l.companyName || l.company || "";
+      document.getElementById("locNameInput").value =
+        l.locationName || l.name || "";
+
+      // 用一個全域變數記住係 edit
+      window.editLocationId = id;
+
+      document.getElementById("locationModal").style.display = "flex";
+      break;
+    }
+  }
+}
+
+    
+function toggleLocation(id) {
+  for (var i = 0; i < locations.length; i++) {
+    if (locations[i].id === id) {
+      locations[i].active = (locations[i].active === false);
+      break;
+    }
+  }
+  localStorage.setItem("locations", JSON.stringify(locations));
+  renderLocationTable();
+}
+
 
 /* --- Render table --- */
 
@@ -287,18 +335,27 @@ function renderLocationTable() {
   for (var i = 0; i < locations.length; i++) {
     var l = locations[i];
 
+    // ✅ 兼容舊資料
     var company = l.companyName || l.company || "";
     var location = l.locationName || l.name || "";
+    var active = (l.active !== false); // default true
 
     var tr = document.createElement("tr");
     tr.innerHTML =
       "<td>" + company + "</td>" +
-      "<td>" + location + "</td>";
+      "<td>" + location + "</td>" +
+      "<td>" + (active ? "✅ 啟用" : "⛔ 已停用") + "</td>" +
+      "<td>" +
+        "<button onclick='editLocation(" + l.id + ")'>編輯</button> " +
+        "<button onclick='toggleLocation(" + l.id + ")'>" +
+          (active ? "停用" : "啟用") +
+        "</button>" +
+      "</td>";
 
     tbody.appendChild(tr);
   }
 }
-
+    
 /* --- Init --- */
 renderLocationTable();
 </script>
