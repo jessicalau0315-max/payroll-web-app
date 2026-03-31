@@ -49,6 +49,30 @@
         <button class="add-btn" onclick="openLocationModal()">+</button>
       </div>
 
+      <!-- ===== Filters ===== -->
+<div style="display:flex; gap:12px; margin:12px 0; flex-wrap:wrap;">
+  
+  <!-- 公司 -->
+  <select id="filterCompany" onchange="applyFilters()">
+    <option value="">全部公司</option>
+  </select>
+
+  <!-- 部門 -->
+  <select id="filterDepartment" onchange="applyFilters()">
+    <option value="">全部部門</option>
+  </select>
+
+  <!-- 工作地點 -->
+  <select id="filterLocation" onchange="applyFilters()">
+    <option value="">全部地點</option>
+  </select>
+
+  <!-- 客戶 -->
+  <input id="filterCustomer" placeholder="輸入客戶" oninput="applyFilters()">
+
+  <button onclick="clearFilters()">清除</button>
+</div>
+      
       <table class="table">
         <thead>
           <tr>
@@ -90,6 +114,30 @@
         <h2>🛠 工種</h2>
         <button class="add-btn" onclick="openJobModal()">+</button>
       </div>
+
+      <!-- ===== Filters ===== -->
+<div style="display:flex; gap:12px; margin:12px 0; flex-wrap:wrap;">
+  
+  <!-- 公司 -->
+  <select id="filterCompany" onchange="applyFilters()">
+    <option value="">全部公司</option>
+  </select>
+
+  <!-- 部門 -->
+  <select id="filterDepartment" onchange="applyFilters()">
+    <option value="">全部部門</option>
+  </select>
+
+  <!-- 工作地點 -->
+  <select id="filterLocation" onchange="applyFilters()">
+    <option value="">全部地點</option>
+  </select>
+
+  <!-- 客戶 -->
+  <input id="filterCustomer" placeholder="輸入客戶" oninput="applyFilters()">
+
+  <button onclick="clearFilters()">清除</button>
+</div>
 
       <table class="table">
         <thead>
