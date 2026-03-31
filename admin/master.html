@@ -3,7 +3,7 @@
 <head>
   <title>Testing | Admin - Master Data</title>
 
-  <!-- ✅ 正確載入 CSS -->
+  <!-- ✅ CSS -->
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -33,40 +33,55 @@
   <!-- ===== Content ===== -->
   <div class="content">
     <h1>🗂 Master Data</h1>
-<div class="master-tabs">
-  <div class="master-tab active" onclick="showMasterTab('location')">上班地點</div>
-  <div class="master-tab" onclick="showMasterTab('department')">部門</div>
-  <div class="master-tab" onclick="showMasterTab('job')">工種</div>
-  <div class="master-tab" onclick="showMasterTab('shift')">班次 / 崗位</div>
-</div>
 
-    <h2>📍 上班地點（Location）</h2>
-    <input id="locCode" placeholder="Code (例如: HQ)">
-    <input id="locName" placeholder="名稱">
-    <button onclick="addLocation()">新增</button>
-    <ul id="locList"></ul>
+    <!-- ===== Tabs ===== -->
+    <div class="master-tabs">
+      <div class="master-tab active" onclick="showMasterTab('location')">上班地點</div>
+      <div class="master-tab" onclick="showMasterTab('department')">部門</div>
+      <div class="master-tab" onclick="showMasterTab('job')">工種</div>
+      <div class="master-tab" onclick="showMasterTab('shift')">班次 / 崗位</div>
+    </div>
 
-    <h2>🏢 部門（Department）</h2>
-    <input id="deptCode" placeholder="Code (例如: HR)">
-    <input id="deptName" placeholder="名稱">
-    <button onclick="addDepartment()">新增</button>
-    <ul id="deptList"></ul>
+    <!-- ===== Location ===== -->
+    <div id="tab-location" class="master-content active">
+      <h2>📍 上班地點（Location）</h2>
+      <input id="locCode" placeholder="Code (例如: HQ)">
+      <input id="locName" placeholder="名稱">
+      <button onclick="addLocation()">新增</button>
+      <ul id="locList"></ul>
+    </div>
 
-    <h2>🛠 工種（Job Type）</h2>
-    <input id="jobCode" placeholder="Code (例如: DRIVER)">
-    <input id="jobName" placeholder="名稱">
-    <button onclick="addJob()">新增</button>
-    <ul id="jobList"></ul>
+    <!-- ===== Department ===== -->
+    <div id="tab-department" class="master-content">
+      <h2>🏢 部門（Department）</h2>
+      <input id="deptCode" placeholder="Code (例如: HR)">
+      <input id="deptName" placeholder="名稱">
+      <button onclick="addDepartment()">新增</button>
+      <ul id="deptList"></ul>
+    </div>
 
-    <h2>⏰ 班次 / 崗位（Shift / Post）</h2>
-    <input id="shiftCode" placeholder="Code (例如: AM)">
-    <input id="shiftName" placeholder="名稱">
-    <button onclick="addShift()">新增</button>
-    <ul id="shiftList"></ul>
+    <!-- ===== Job ===== -->
+    <div id="tab-job" class="master-content">
+      <h2>🛠 工種（Job Type）</h2>
+      <input id="jobCode" placeholder="Code (例如: DRIVER)">
+      <input id="jobName" placeholder="名稱">
+      <button onclick="addJob()">新增</button>
+      <ul id="jobList"></ul>
+    </div>
+
+    <!-- ===== Shift ===== -->
+    <div id="tab-shift" class="master-content">
+      <h2>⏰ 班次 / 崗位（Shift / Post）</h2>
+      <input id="shiftCode" placeholder="Code (例如: AM)">
+      <input id="shiftName" placeholder="名稱">
+      <button onclick="addShift()">新增</button>
+      <ul id="shiftList"></ul>
+    </div>
+
   </div>
-
 </div>
 
+<!-- ===== Script ===== -->
 <script>
 /* ===== Auth ===== */
 if (localStorage.getItem("role") !== "admin") {
@@ -77,63 +92,72 @@ function logout() {
   window.location.href = "../login.html";
 }
 
-/* ===== Storage ===== */
-function load(k){ return JSON.parse(localStorage.getItem(k)||"[]"); }
-function save(k,v){ localStorage.setItem(k,JSON.stringify(v)); }
+/* ===== Tabs ===== */
+function showMasterTab(type) {
+  document.querySelectorAll('.master-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.master-content').forEach(c => c.classList.remove('active'));
+
+  document.querySelector(`.master-tab[onclick="showMasterTab('${type}')"]`).classList.add('active');
+  document.getElementById('tab-' + type).classList.add('active');
+}
+
+/* ===== Storage Helpers ===== */
+function load(k){ return JSON.parse(localStorage.getItem(k) || "[]"); }
+function save(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
 
 /* ===== Location ===== */
 let locations = load("locations");
 function addLocation(){
-  locations.push({id:Date.now(),code:locCode.value,name:locName.value,active:true});
-  save("locations",locations);
-  locCode.value=locName.value="";
+  locations.push({id:Date.now(), code:locCode.value, name:locName.value, active:true});
+  save("locations", locations);
+  locCode.value = locName.value = "";
   renderLocations();
 }
 function renderLocations(){
-  locList.innerHTML="";
-  locations.forEach(l=>locList.innerHTML+=`<li>${l.code} - ${l.name}</li>`);
+  locList.innerHTML = "";
+  locations.forEach(l => locList.innerHTML += `<li>${l.code} - ${l.name}</li>`);
 }
 renderLocations();
 
 /* ===== Department ===== */
 let departments = load("departments");
 function addDepartment(){
-  departments.push({id:Date.now(),code:deptCode.value,name:deptName.value,active:true});
-  save("departments",departments);
-  deptCode.value=deptName.value="";
+  departments.push({id:Date.now(), code:deptCode.value, name:deptName.value, active:true});
+  save("departments", departments);
+  deptCode.value = deptName.value = "";
   renderDepartments();
 }
 function renderDepartments(){
-  deptList.innerHTML="";
-  departments.forEach(d=>deptList.innerHTML+=`<li>${d.code} - ${d.name}</li>`);
+  deptList.innerHTML = "";
+  departments.forEach(d => deptList.innerHTML += `<li>${d.code} - ${d.name}</li>`);
 }
 renderDepartments();
 
 /* ===== Job ===== */
 let jobs = load("jobs");
 function addJob(){
-  jobs.push({id:Date.now(),code:jobCode.value,name:jobName.value,active:true});
-  save("jobs",jobs);
-  jobCode.value=jobName.value="";
+  jobs.push({id:Date.now(), code:jobCode.value, name:jobName.value, active:true});
+  save("jobs", jobs);
+  jobCode.value = jobName.value = "";
   renderJobs();
 }
 function renderJobs(){
-  jobList.innerHTML="";
-  jobs.forEach(j=>jobList.innerHTML+=`<li>${j.code} - ${j.name}</li>`);
+  jobList.innerHTML = "";
+  jobs.forEach(j => jobList.innerHTML += `<li>${j.code} - ${j.name}</li>`);
 }
 renderJobs();
 
 /* ===== Shift ===== */
 let shifts = load("shifts");
 function addShift(){
-  shifts.push({id:Date.now(),code:shiftCode.value,name:shiftName.value,active:true});
-  save("shifts",shifts);
-  shiftCode.value=shiftName.value="";
+  shifts.push({id:Date.now(), code:shiftCode.value, name:shiftName.value, active:true});
+  save("shifts", shifts);
+  shiftCode.value = shiftName.value = "";
   renderShifts();
 }
 function renderShifts(){
-  shiftList.innerHTML="";
-  shifts.forEach(s=>shiftList.innerHTML+=`<li>${s.code} - ${s.name}</li>`);
+  shiftList.innerHTML = "";
+  shifts.forEach(s => shiftList.innerHTML += `<li>${s.code} - ${s.name}</li>`);
 }
 renderShifts();
 </script>
