@@ -161,3 +161,30 @@ body {
 .modal-footer button {
   margin-left: 10px;
 }
+
+/* ===== Table base style ===== */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+}
+
+/* Header */
+.table th {
+  background: #f5f5f5;
+  font-weight: bold;
+  text-align: left;
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+/* Cells */
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+/* Optional: hover effect */
+.table tbody tr:hover {
+  background: #fafafa;
+}
