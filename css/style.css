@@ -50,4 +50,30 @@ body {
   padding: 20px;
   flex-grow: 1;
 }
+/* ===== Tabs ===== */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
 
+.tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  color: #666;
+}
+
+.tab.active {
+  color: #ff6a00;
+  border-bottom: 2px solid #ff6a00;
+  font-weight: bold;
+}
+
+/* ===== Tab Content ===== */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
