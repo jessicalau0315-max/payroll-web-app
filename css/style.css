@@ -50,30 +50,40 @@ body {
   padding: 20px;
   flex-grow: 1;
 }
-/* ===== Tabs ===== */
-.tabs {
+/* ===== Master Tabs ===== */
+.master-tabs {
   display: flex;
+  gap: 24px;
   border-bottom: 1px solid #ddd;
   margin-bottom: 20px;
 }
 
-.tab {
-  padding: 10px 20px;
+.master-tab {
+  padding: 10px 0;
   cursor: pointer;
-  color: #666;
+  color: #555;
+  position: relative;
 }
 
-.tab.active {
+.master-tab.active {
   color: #ff6a00;
-  border-bottom: 2px solid #ff6a00;
   font-weight: bold;
 }
 
-/* ===== Tab Content ===== */
-.tab-content {
+.master-tab.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 2px;
+  background: #ff6a00;
+}
+
+.master-content {
   display: none;
 }
 
-.tab-content.active {
+.master-content.active {
   display: block;
 }
