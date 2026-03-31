@@ -105,16 +105,16 @@
   </div>
 
   <table class="table" style="margin-top:12px;">
-    <thead>
-      <tr>
-        <th>公司名稱</th>
-        <th>工作地點</th>
-        <th>部門代碼</th>
-        <th>部門名稱</th>
-        <th>狀態</th>
-        <th>操作</th>
-      </tr>
-    </thead>
+<thead>
+  <tr>
+    <th>公司名稱</th>
+    <th>工作地點</th>
+    <th>部門代碼</th>
+    <th>部門名稱</th>
+    <th>狀態</th>
+    <th>操作</th>
+  </tr>
+</thead>
     <tbody id="departmentTableBody"></tbody>
   </table>
 
@@ -361,7 +361,164 @@ function renderLocationTable() {
 /* --- Init --- */
 renderLocationTable();
 </script>
-  
+
+ <script>
+/* ============================
+   Department Tab – ES5
+   ============================ */
+
+var departments = JSON.parse(localStorage.getItem("departments") || "[]");
+
+/* --- 打開 Modal --- */
+function openDepartmentModal() {
+  document.getElementById("departmentModal").style.display = "flex";
+
+  // 清 edit 狀態
+  document.getElementById("deptEditId").value = "";
+  document.getElementById("deptCode").value = "";
+  document.getElementById("deptName").value = "";
+
+  // 填 Location（只顯示 active）
+  var locSelect = document.getElementById("deptLocation");
+  locSelect.innerHTML = "";
+
+  for (var i = 0; i < locations.length; i++) {
+    if (locations[i].active !== false) {
+      var opt = document.createElement("option");
+      opt.value = locations[i].id;
+      opt.text = locations[i].locationName || locations[i].name;
+      locSelect.appendChild(opt);
+    }
+  }
+}
+
+/* --- 關 Modal --- */
+function closeDepartmentModal() {
+  document.getElementById("departmentModal").style.display = "none";
+}
+
+/* --- 儲存（新增 / 編輯） --- */
+function saveDepartment() {
+  var company = document.getElementById("deptCompany").value;
+  var locationId = document.getElementById("deptLocation").value;
+  var code = document.getElementById("deptCode").value.trim();
+  var name = document.getElementById("deptName").value.trim();
+  var editId = document.getElementById("deptEditId").value;
+
+  if (code === "" || name === "") {
+    alert("請填寫部門代碼及名稱");
+    return;
+  }
+
+  // 英文＋數字限制
+  if (!/^[A-Za-z0-9]+$/.test(code)) {
+    alert("部門代碼只限英文及數字");
+    return;
+  }
+
+  // 找 location
+  var locObj = null;
+  for (var i = 0; i < locations.length; i++) {
+    if (String(locations[i].id) === String(locationId)) {
+      locObj = locations[i];
+      break;
+    }
+  }
+
+  if (!locObj) {
+    alert("請選擇有效的工作地點");
+    return;
+  }
+
+  if (editId) {
+    // 編輯
+    for (var j = 0; j < departments.length; j++) {
+      if (departments[j].id === editId) {
+        departments[j].company = company;
+        departments[j].locationId = locationId;
+        departments[j].locationName = locObj.locationName || locObj.name;
+        departments[j].code = code;
+        departments[j].name = name;
+        break;
+      }
+    }
+  } else {
+    // 新增
+    departments.push({
+      id: String(new Date().getTime()),
+      company: company,
+      locationId: locationId,
+      locationName: locObj.locationName || locObj.name,
+      code: code,
+      name: name,
+      active: true
+    });
+  }
+
+  localStorage.setItem("departments", JSON.stringify(departments));
+  closeDepartmentModal();
+  renderDepartmentTable();
+}
+
+/* --- 編輯 --- */
+function editDepartment(id) {
+  for (var i = 0; i < departments.length; i++) {
+    if (departments[i].id === id) {
+      var d = departments[i];
+      document.getElementById("deptCompany").value = d.company;
+      document.getElementById("deptCode").value = d.code;
+      document.getElementById("deptName").value = d.name;
+      document.getElementById("deptEditId").value = id;
+
+      openDepartmentModal();
+      document.getElementById("deptLocation").value = d.locationId;
+      break;
+    }
+  }
+}
+
+/* --- 停用 / 啟用 --- */
+function toggleDepartment(id) {
+  for (var i = 0; i < departments.length; i++) {
+    if (departments[i].id === id) {
+      departments[i].active = (departments[i].active === false);
+      break;
+    }
+  }
+  localStorage.setItem("departments", JSON.stringify(departments));
+  renderDepartmentTable();
+}
+
+/* --- Render Table --- */
+function renderDepartmentTable() {
+  var tbody = document.getElementById("departmentTableBody");
+  tbody.innerHTML = "";
+
+  for (var i = 0; i < departments.length; i++) {
+    var d = departments[i];
+    var active = (d.active !== false);
+
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      "<td>" + d.company + "</td>" +
+      "<td>" + d.locationName + "</td>" +
+      "<td>" + d.code + "</td>" +
+      "<td>" + d.name + "</td>" +
+      "<td>" + (active ? "✅ 啟用" : "⛔ 已停用") + "</td>" +
+      "<td>" +
+        "<button onclick='editDepartment(\"" + d.id + "\")'>編輯</button> " +
+        "<button onclick='toggleDepartment(\"" + d.id + "\")'>" +
+          (active ? "停用" : "啟用") +
+        "</button>" +
+      "</td>";
+
+    tbody.appendChild(tr);
+  }
+}
+
+/* --- Init --- */
+renderDepartmentTable();
+</script> 
 
 </body>
 </html>
