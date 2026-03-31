@@ -173,5 +173,105 @@
 </div>
 
 
+  <script>
+/* ============================
+   Location Tab – Minimal ES5
+   ============================ */
+
+/* --- Data --- */
+var companies = JSON.parse(localStorage.getItem("companies") || "[]");
+var locations = JSON.parse(localStorage.getItem("locations") || "[]");
+
+/* Default company */
+if (companies.length === 0) {
+  companies.push({
+    id: new Date().getTime(),
+    name: "KLN Logistics (HK) LTD."
+  });
+  localStorage.setItem("companies", JSON.stringify(companies));
+}
+
+/* --- Modal control --- */
+function openLocationModal() {
+  document.getElementById("locationModal").style.display = "flex";
+  document.getElementById("locNameInput").value = "";
+  renderCompanyList();
+}
+
+function closeLocationModal() {
+  document.getElementById("locationModal").style.display = "none";
+}
+
+/* --- Company dropdown (editable) --- */
+function renderCompanyList() {
+  var list = document.getElementById("companyList");
+  list.innerHTML = "";
+  for (var i = 0; i < companies.length; i++) {
+    var opt = document.createElement("option");
+    opt.value = companies[i].name;
+    list.appendChild(opt);
+  }
+  document.getElementById("locCompanyInput").value = companies[0].name;
+}
+
+/* --- Save location --- */
+function saveLocation() {
+  var companyName = document.getElementById("locCompanyInput").value.trim();
+  var locationName = document.getElementById("locNameInput").value.trim();
+
+  if (companyName === "" || locationName === "") {
+    alert("請填寫公司名稱及工作地點");
+    return;
+  }
+
+  var company = null;
+  for (var i = 0; i < companies.length; i++) {
+    if (companies[i].name === companyName) {
+      company = companies[i];
+      break;
+    }
+  }
+
+  if (company === null) {
+    company = {
+      id: new Date().getTime(),
+      name: companyName
+    };
+    companies.push(company);
+    localStorage.setItem("companies", JSON.stringify(companies));
+  }
+
+  locations.push({
+    id: new Date().getTime(),
+    companyId: company.id,
+    companyName: company.name,
+    locationName: locationName
+  });
+
+  localStorage.setItem("locations", JSON.stringify(locations));
+  closeLocationModal();
+  renderLocationTable();
+}
+
+/* --- Render table --- */
+function renderLocationTable() {
+  var tbody = document.getElementById("locationTableBody");
+  tbody.innerHTML = "";
+
+  for (var i = 0; i < locations.length; i++) {
+    var l = locations[i];
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      "<td>" + l.companyName + "</td>" +
+      "<td>" + l.locationName + "</td>";
+    tbody.appendChild(tr);
+  }
+}
+
+/* --- Init --- */
+renderLocationTable();
+</script>
+  
+
 </body>
 </html>
