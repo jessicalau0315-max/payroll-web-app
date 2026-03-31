@@ -1,4 +1,4 @@
-console.log("✅ auth.js loaded");
+console.log("auth.js loaded");
 
 function login() {
   const username = document.getElementById("username").value;
