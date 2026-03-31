@@ -438,14 +438,13 @@ function renderDepartmentTable() {
 /* Init */
 renderDepartmentTable();
 
-/* =====================================================
+/* ================================
    ✅ Job Type – Simple Dictionary
-   ===================================================== */
+   ================================ */
 
 let jobs = JSON.parse(localStorage.getItem("jobs")) || [];
 
-/* Modal Control */
-function openJobModal(job = null) {
+function openJobModal(job) {
   document.getElementById("jobModal").style.display = "flex";
   document.getElementById("jobModalTitle").innerText = job ? "編輯工種" : "新增工種";
 
@@ -462,7 +461,6 @@ function closeJobModal() {
   document.getElementById("jobModal").style.display = "none";
 }
 
-/* Save */
 function saveJob() {
   const name = jobName.value.trim();
   const editId = jobEditId.value;
@@ -473,13 +471,20 @@ function saveJob() {
   }
 
   if (editId) {
-    jobs = jobs.map(j =>
-      j.id == editId ? { ...j, name } : j
-    );
+    jobs = jobs.map(j => {
+      if (j.id == editId) {
+        return {
+          id: j.id,
+          name: name,
+          active: j.active
+        };
+      }
+      return j;
+    });
   } else {
     jobs.push({
       id: Date.now(),
-      name,
+      name: name,
       active: true
     });
   }
@@ -489,37 +494,41 @@ function saveJob() {
   renderJobTable();
 }
 
-/* Enable / Disable */
 function toggleJob(id) {
-  jobs = jobs.map(j =>
-    j.id === id ? { ...j, active: !j.active } : j
-  );
+  jobs = jobs.map(j => {
+    if (j.id === id) {
+      return {
+        id: j.id,
+        name: j.name,
+        active: !j.active
+      };
+    }
+    return j;
+  });
+
   localStorage.setItem("jobs", JSON.stringify(jobs));
   renderJobTable();
 }
 
-/* Render */
 function renderJobTable() {
   const tbody = document.getElementById("jobTableBody");
   tbody.innerHTML = "";
 
   jobs.forEach(j => {
     const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${j.name}</td>
-      <td>${j.active ? "✅ 啟用" : "⛔ 已停用"}</td>
-      <td>
-        <button onclick='openJobModal(${JSON.stringify(j)})'>編輯</button>
-        <button onclick='toggleJob(${j.id})'>
-          ${j.active ? "停用" : "啟用"}
-        </button>
-      </td>
-    `;
+    tr.innerHTML =
+      "<td>" + j.name + "</td>" +
+      "<td>" + (j.active ? "✅ 啟用" : "⛔ 已停用") + "</td>" +
+      "<td>" +
+        "<button onclick='openJobModal(" + JSON.stringify(j) + ")'>編輯</button>" +
+        "<button onclick='toggleJob(" + j.id + ")'>" +
+          (j.active ? "停用" : "啟用") +
+        "</button>" +
+      "</td>";
     tbody.appendChild(tr);
   });
 }
 
-/* Init */
 renderJobTable();
 
 </body>
