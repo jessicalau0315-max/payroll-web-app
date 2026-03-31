@@ -1,1 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Testing | User - Attendance</title>
+  ../css/style.css
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">🧪 Testing</div>
+  <div class="user">User <button onclick="logout()">Logout</button></div>
+</div>
+
+<div class="layout">
+  <div class="sidebar">
+    <a href="dashboard.html">🏠 Dashboard</a>
+    <a href="employees.html">👥 Employees</a>
+    <a href="attendance.html">⏱ Attendance</a>
+    <a href="payroll.html">💰 Payroll</a>
+    <a href="reports.html">📄 Reports</a>
+  </div>
+
+  <div class="content">
+    <h1>⏱ Attendance（用戶）</h1>
+    <p>用戶只可以輸入同查看自己嘅紀錄。</p>
+  </div>
+</div>
+
+<script>
+  if (localStorage.getItem("role") !== "user") {
+    window.location.href = "../login.html";
+  }
+  function logout() {
+    localStorage.removeItem("role");
+    window.location.href = "../login.html";
+  }
+</script>
+
+</body>
+</html>
 
