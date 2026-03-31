@@ -1,8 +1,41 @@
-<div class="sidebar">
-  <a href="dashboard.html">🏠 Dashboard</a>
-  <a href="master.html">🗂 Master Data</a>
-  <a href="employees.html">👥 Employees</a>
-  <a href="attendance.html">⏱ Attendance</a>
-  <a href="payroll.html">💰 Payroll</a>
-  <a href="reports.html">📄 Reports</a>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Testing | Admin - Employees</title>
+  ../css/style.css
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">🧪 Testing</div>
+  <div class="user">Admin <button onclick="logout()">Logout</button></div>
 </div>
+
+<div class="layout">
+  <div class="sidebar">
+    <a href="dashboard.html">🏠 Dashboard</a>
+    <a href="master.html">🗂 Master Data</a>
+    <a href="employees.html">👥 Employees</a>
+    <a href="attendance.html">⏱ Attendance</a>
+    <a href="payroll.html">💰 Payroll</a>
+    <a href="reports.html">📄 Reports</a>
+  </div>
+
+  <div class="content">
+    <h1>👥 Employees（管理員）</h1>
+    <p>呢頁之後會做員工管理。</p>
+  </div>
+</div>
+
+<script>
+  if (localStorage.getItem("role") !== "admin") {
+    window.location.href = "../login.html";
+  }
+  function logout() {
+    localStorage.removeItem("role");
+    window.location.href = "../login.html";
+  }
+</script>
+
+</body>
+</html>
