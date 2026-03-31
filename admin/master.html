@@ -159,22 +159,66 @@
   </div>
 </div>
     
-    <!-- ===== Job ===== -->
-    <div id="tab-job" class="master-content">
-      <h2>🛠 工種（Job Type）</h2>
-      <input id="jobCode" placeholder="Code (例如: DRIVER)">
-      <input id="jobName" placeholder="名稱">
-      <button onclick="addJob()">新增</button>
-      <ul id="jobList"></ul>
+    <!-- ===== Job Type ===== -->
+<div id="tab-job" class="master-content">
+
+  <div style="display:flex; align-items:center; justify-content:space-between;">
+    <h2 style="margin:0;">🛠 工種（Job Type）</h2>
+    <button class="add-btn" onclick="openJobModal()">+</button>
+  </div>
+
+  <table class="table" style="margin-top:12px;">
+    <thead>
+      <tr>
+        <th>公司名稱</th>
+        <th>工作地點</th>
+        <th>部門</th>
+        <th>工種代碼</th>
+        <th>工種名稱</th>
+        <th>狀態</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody id="jobTableBody"></tbody>
+  </table>
+
+</div>
+
+    <!-- ===== Job Modal ===== -->
+<div id="jobModal" class="modal-overlay">
+  <div class="modal">
+
+    <div class="modal-header">
+      <h3 id="jobModalTitle">新增工種</h3>
+      <span class="modal-close" onclick="closeJobModal()">✕</span>
     </div>
 
-    <!-- ===== Shift ===== -->
-    <div id="tab-shift" class="master-content">
-      <h2>⏰ 班次 / 崗位（Shift / Post）</h2>
-      <input id="shiftCode" placeholder="Code (例如: AM)">
-      <input id="shiftName" placeholder="名稱">
-      <button onclick="addShift()">新增</button>
-      <ul id="shiftList"></ul>
+    <div class="modal-body">
+      <label>公司名稱</label>
+      <select id="jobCompany">
+        <option value="KLN Logistics (HK) LTD.">
+          KLN Logistics (HK) LTD.
+        </option>
+      </select>
+
+      <label>工作地點</label>
+      <select id="jobLocation" onchange="onJobLocationChange()"></select>
+
+      <label>部門</label>
+      <select id="jobDepartment"></select>
+
+      <label>工種代碼（只限英文及數字）</label>
+      <input id="jobCode">
+
+      <label>工種名稱</label>
+      <input id="jobName">
+
+      <input type="hidden" id="jobEditId">
+    </div>
+
+    <div class="modal-footer">
+      <button onclick="closeJobModal()">取消</button>
+      <button onclick="saveJob()">儲存</button>
     </div>
 
   </div>
@@ -411,6 +455,144 @@ function renderDepartmentTable() {
 
 /* Init */
 renderDepartmentTable();
+
+  /* =====================================================
+   ✅ Job Type – depends on Location & Department
+   ===================================================== */
+
+let jobs = JSON.parse(localStorage.getItem("jobs")) || [];
+
+/* Modal Control */
+function openJobModal(job = null) {
+  document.getElementById("jobModal").style.display = "flex";
+  jobModalTitle.innerText = job ? "編輯工種" : "新增工種";
+
+  // populate locations (only active)
+  jobLocation.innerHTML = "";
+  locations.filter(l => l.active).forEach(l => {
+    const opt = document.createElement("option");
+    opt.value = l.id;
+    opt.text = l.name;
+    jobLocation.appendChild(opt);
+  });
+
+  onJobLocationChange();
+
+  if (job) {
+    jobCompany.value = job.company;
+    jobLocation.value = job.locationId;
+    onJobLocationChange();
+    jobDepartment.value = job.departmentId;
+    jobCode.value = job.code;
+    jobName.value = job.name;
+    jobEditId.value = job.id;
+  } else {
+    jobCompany.value = "KLN Logistics (HK) LTD.";
+    jobCode.value = "";
+    jobName.value = "";
+    jobEditId.value = "";
+  }
+}
+
+function closeJobModal() {
+  document.getElementById("jobModal").style.display = "none";
+}
+
+/* When Location changes → filter departments */
+function onJobLocationChange() {
+  const locId = Number(jobLocation.value);
+  jobDepartment.innerHTML = "";
+
+  departments
+    .filter(d => d.active && d.locationId === locId)
+    .forEach(d => {
+      const opt = document.createElement("option");
+      opt.value = d.id;
+      opt.text = d.name;
+      jobDepartment.appendChild(opt);
+    });
+}
+
+/* Save */
+function saveJob() {
+  const company = jobCompany.value;
+  const locationId = Number(jobLocation.value);
+  const departmentId = Number(jobDepartment.value);
+  const location = locations.find(l => l.id === locationId);
+  const department = departments.find(d => d.id === departmentId);
+  const code = jobCode.value.trim();
+  const name = jobName.value.trim();
+  const editId = jobEditId.value;
+
+  if (!code || !name || !department) {
+    alert("請填寫完整工種資料");
+    return;
+  }
+
+  if (!/^[A-Za-z0-9]+$/.test(code)) {
+    alert("工種代碼只限英文及數字");
+    return;
+  }
+
+  const record = {
+    id: editId ? Number(editId) : Date.now(),
+    company,
+    locationId,
+    locationName: location.name,
+    departmentId,
+    departmentName: department.name,
+    code,
+    name,
+    active: true
+  };
+
+  if (editId) {
+    jobs = jobs.map(j => j.id == editId ? record : j);
+  } else {
+    jobs.push(record);
+  }
+
+  localStorage.setItem("jobs", JSON.stringify(jobs));
+  closeJobModal();
+  renderJobTable();
+}
+
+/* Enable / Disable */
+function toggleJob(id) {
+  jobs = jobs.map(j =>
+    j.id === id ? { ...j, active: !j.active } : j
+  );
+  localStorage.setItem("jobs", JSON.stringify(jobs));
+  renderJobTable();
+}
+
+/* Render Table */
+function renderJobTable() {
+  const tbody = document.getElementById("jobTableBody");
+  tbody.innerHTML = "";
+
+  jobs.forEach(j => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${j.company}</td>
+      <td>${j.locationName}</td>
+      <td>${j.departmentName}</td>
+      <td>${j.code}</td>
+      <td>${j.name}</td>
+      <td>${j.active ? "✅ 啟用" : "⛔ 已停用"}</td>
+      <td>
+        <button onclick='openJobModal(${JSON.stringify(j)})'>編輯</button>
+        <button onclick='toggleJob(${j.id})'>
+          ${j.active ? "停用" : "啟用"}
+        </button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+/* Init */
+renderJobTable();
   
 </script>
 
