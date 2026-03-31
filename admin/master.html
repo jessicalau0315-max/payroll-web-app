@@ -55,6 +55,35 @@
   <ul id="locationList"></ul>
 </div>
 
+    <!-- ===== Location Modal ===== -->
+<div id="locationModal" class="modal-overlay">
+  <div class="modal">
+    
+    <div class="modal-header">
+      <h3>新增上班地點</h3>
+      <span class="modal-close" onclick="closeLocationModal()">✕</span>
+    </div>
+
+    <div class="modal-body">
+      <label>公司名稱</label>
+      <select id="locCompany">
+        <option value="KLN Logistics (HK) LTD.">
+          KLN Logistics (HK) LTD.
+        </option>
+      </select>
+
+      <label>工作地點</label>
+      <input id="locName" placeholder="請輸入工作地點">
+    </div>
+
+    <div class="modal-footer">
+      <button onclick="closeLocationModal()">取消</button>
+      <button onclick="saveLocation()">確認新增</button>
+    </div>
+
+  </div>
+</div>
+
     <!-- ===== Department ===== -->
     <div id="tab-department" class="master-content">
       <h2>🏢 部門（Department）</h2>
