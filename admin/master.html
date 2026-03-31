@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
   <title>Testing | Admin - Master Data</title>
-
-  <!-- ✅ CSS -->
   <link rel="stylesheet" href="../css/style.css">
 </head>
+
 <body>
 
 <!-- ===== Header ===== -->
@@ -32,517 +32,301 @@
 
   <!-- ===== Content ===== -->
   <div class="content">
+
     <h1>Master Data</h1>
 
     <!-- ===== Tabs ===== -->
     <div class="master-tabs">
-      <div class="master-tab active" onclick="showMasterTab('location')">上班地點</div>
-      <div class="master-tab" onclick="showMasterTab('department')">部門</div>
-      <div class="master-tab" onclick="showMasterTab('job')">工種</div>
-      <div class="master-tab" onclick="showMasterTab('shift')">班次 / 崗位</div>
+      <div class="master-tab active" onclick="showTab('location')">上班地點</div>
+      <div class="master-tab" onclick="showTab('department')">部門</div>
+      <div class="master-tab" onclick="showTab('job')">工種</div>
     </div>
 
-    <!-- ===== Location ===== -->
-    
-<!-- ===== Location ===== -->
-<div id="tab-location" class="master-content active">
+    <!-- ================= Location ================= -->
+    <div id="tab-location" class="master-content active">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h2>📍 上班地點</h2>
+        <button class="add-btn" onclick="openLocationModal()">+</button>
+      </div>
 
-  <div style="display:flex; align-items:center; justify-content:space-between;">
-    <h2 style="margin:0;">📍 上班地點（Location）</h2>
-    <button class="add-btn" onclick="openLocationModal()">+</button>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>公司</th>
+            <th>地點</th>
+            <th>狀態</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="locationBody"></tbody>
+      </table>
+    </div>
+
+    <!-- ================= Department ================= -->
+    <div id="tab-department" class="master-content">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h2>🏢 部門</h2>
+        <button class="add-btn" onclick="openDepartmentModal()">+</button>
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>公司</th>
+            <th>地點</th>
+            <th>代碼</th>
+            <th>名稱</th>
+            <th>狀態</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="departmentBody"></tbody>
+      </table>
+    </div>
+
+    <!-- ================= Job ================= -->
+    <div id="tab-job" class="master-content">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h2>🛠 工種</h2>
+        <button class="add-btn" onclick="openJobModal()">+</button>
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>名稱</th>
+            <th>狀態</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="jobBody"></tbody>
+      </table>
+    </div>
+
   </div>
-
-  <table class="table" style="margin-top:12px;">
-    <thead>
-      <tr>
-        <th>公司名稱</th>
-        <th>工作地點</th>
-        <th>狀態</th>
-        <th>操作</th>
-      </tr>
-    </thead>
-    <tbody id="locationTableBody"></tbody>
-  </table>
-
 </div>
 
-  <!-- ===== Location Modal ===== -->
+<!-- ================= Modals ================= -->
+
+<!-- Location Modal -->
 <div id="locationModal" class="modal-overlay">
   <div class="modal">
-
-    <div class="modal-header">
-      <h3 id="locationModalTitle">新增上班地點</h3>
-      <span class="modal-close" onclick="closeLocationModal()">✕</span>
-    </div>
-
-    <div class="modal-body">
-      <label>公司名稱</label>
-      <select id="locCompany">
-        <option value="KLN Logistics (HK) LTD.">
-          KLN Logistics (HK) LTD.
-        </option>
-      </select>
-
-      <label>工作地點</label>
-      <input id="locName" placeholder="請輸入工作地點">
-
-      <!-- hidden，用嚟分新增 / 編輯 -->
-      <input type="hidden" id="locEditId">
-    </div>
-
-    <div class="modal-footer">
-      <button onclick="closeLocationModal()">取消</button>
-      <button onclick="saveLocation()">儲存</button>
-    </div>
-
+    <h3>上班地點</h3>
+    <label>公司</label>
+    <input id="locCompany" value="KLN Logistics (HK) LTD.">
+    <label>地點</label>
+    <input id="locName">
+    <input type="hidden" id="locEditId">
+    <br><br>
+    <button onclick="saveLocation()">儲存</button>
+    <button onclick="closeLocationModal()">取消</button>
   </div>
 </div>
 
-<!-- ===== Department ===== -->
-<div id="tab-department" class="master-content">
-
-  <div style="display:flex; align-items:center; justify-content:space-between;">
-    <h2 style="margin:0;">🏢 部門（Department）</h2>
-    <button class="add-btn" onclick="openDepartmentModal()">+</button>
-  </div>
-
-  <table class="table" style="margin-top:12px;">
-    <thead>
-      <tr>
-        <th>公司名稱</th>
-        <th>工作地點</th>
-        <th>部門代碼</th>
-        <th>部門名稱</th>
-        <th>狀態</th>
-        <th>操作</th>
-      </tr>
-    </thead>
-    <tbody id="departmentTableBody"></tbody>
-  </table>
-
-</div>
-
-    <!-- ===== Department Modal ===== -->
+<!-- Department Modal -->
 <div id="departmentModal" class="modal-overlay">
   <div class="modal">
-
-    <div class="modal-header">
-      <h3 id="departmentModalTitle">新增部門</h3>
-      <span class="modal-close" onclick="closeDepartmentModal()">✕</span>
-    </div>
-
-    <div class="modal-body">
-      <label>公司名稱</label>
-      <select id="deptCompany">
-        <option value="KLN Logistics (HK) LTD.">
-          KLN Logistics (HK) LTD.
-        </option>
-      </select>
-
-      <label>工作地點</label>
-      <select id="deptLocation"></select>
-
-      <label>部門代碼（只限英文及數字）</label>
-      <input id="deptCode">
-
-      <label>部門名稱</label>
-      <input id="deptName">
-
-      <input type="hidden" id="deptEditId">
-    </div>
-
-    <div class="modal-footer">
-      <button onclick="closeDepartmentModal()">取消</button>
-      <button onclick="saveDepartment()">儲存</button>
-    </div>
-
+    <h3>部門</h3>
+    <label>公司</label>
+    <input id="deptCompany" value="KLN Logistics (HK) LTD.">
+    <label>地點</label>
+    <select id="deptLocation"></select>
+    <label>代碼</label>
+    <input id="deptCode">
+    <label>名稱</label>
+    <input id="deptName">
+    <input type="hidden" id="deptEditId">
+    <br><br>
+    <button onclick="saveDepartment()">儲存</button>
+    <button onclick="closeDepartmentModal()">取消</button>
   </div>
 </div>
 
-    
-    <!-- ===== Job Type ===== -->
-<div id="tab-job" class="master-content">
-
-  <div style="display:flex; align-items:center; justify-content:space-between;">
-    <h2 style="margin:0;">🛠 工種（Job Type）</h2>
-    <button class="add-btn" onclick="openJobModal()">+</button>
-  </div>
-
-  <table class="table" style="margin-top:12px;">
-    <thead>
-      <tr>
-        <th>工種名稱</th>
-        <th>狀態</th>
-        <th>操作</th>
-      </tr>
-    </thead>
-    <tbody id="jobTableBody"></tbody>
-  </table>
-
-</div>
-
-    
-    <!-- ===== Job Modal ===== -->
+<!-- Job Modal -->
 <div id="jobModal" class="modal-overlay">
   <div class="modal">
-
-    <div class="modal-header">
-      <h3 id="jobModalTitle">新增工種</h3>
-      <span class="modal-close" onclick="closeJobModal()">✕</span>
-    </div>
-
-    <div class="modal-body">
-      <label>工種名稱</label>
-      <input id="jobName" placeholder="例如：司機">
-      <input type="hidden" id="jobEditId">
-    </div>
-
-    <div class="modal-footer">
-      <button onclick="closeJobModal()">取消</button>
-      <button onclick="saveJob()">儲存</button>
-    </div>
-
+    <h3>工種</h3>
+    <label>名稱</label>
+    <input id="jobName">
+    <input type="hidden" id="jobEditId">
+    <br><br>
+    <button onclick="saveJob()">儲存</button>
+    <button onclick="closeJobModal()">取消</button>
   </div>
 </div>
-    
-
-<!-- ===== Script ===== -->
 
 <script>
 /* ===== Auth ===== */
 if (localStorage.getItem("role") !== "admin") {
-  window.location.href = "../login.html";
+  location.href = "../login.html";
 }
 function logout() {
   localStorage.clear();
-  window.location.href = "../login.html";
+  location.href = "../login.html";
 }
 
 /* ===== Tabs ===== */
-function showMasterTab(type) {
-  document.querySelectorAll('.master-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.master-content').forEach(c => c.classList.remove('active'));
-  document.querySelector(`.master-tab[onclick="showMasterTab('${type}')"]`).classList.add('active');
-  document.getElementById('tab-' + type).classList.add('active');
+function showTab(name){
+  var tabs = document.getElementsByClassName("master-tab");
+  var conts = document.getElementsByClassName("master-content");
+  for(var i=0;i<tabs.length;i++){tabs[i].classList.remove("active");}
+  for(var j=0;j<conts.length;j++){conts[j].classList.remove("active");}
+  document.getElementById("tab-"+name).classList.add("active");
 }
 
-/* =====================================================
-   ✅ Location – Table + Edit + Enable / Disable
-   ===================================================== */
+/* ===== Data ===== */
+var locations = JSON.parse(localStorage.getItem("locations")||"[]");
+var departments = JSON.parse(localStorage.getItem("departments")||"[]");
+var jobs = JSON.parse(localStorage.getItem("jobs")||"[]");
 
-let locations = JSON.parse(localStorage.getItem("locations")) || [];
-
-/* Modal Control */
-function openLocationModal(location = null) {
-  document.getElementById("locationModal").style.display = "flex";
-
-  if (location) {
-    document.getElementById("locationModalTitle").innerText = "編輯上班地點";
-    document.getElementById("locCompany").value = location.company;
-    document.getElementById("locName").value = location.name;
-    document.getElementById("locEditId").value = location.id;
-  } else {
-    document.getElementById("locationModalTitle").innerText = "新增上班地點";
-    document.getElementById("locCompany").value = "KLN Logistics (HK) LTD.";
-    document.getElementById("locName").value = "";
-    document.getElementById("locEditId").value = "";
+/* ===== Render ===== */
+function renderLocations(){
+  var b = document.getElementById("locationBody");
+  b.innerHTML="";
+  for(var i=0;i<locations.length;i++){
+    var l=locations[i];
+    var tr="<tr><td>"+l.company+"</td><td>"+l.name+"</td><td>"+(l.active?"啟用":"停用")+"</td>"+
+      "<td><button onclick='editLocation("+l.id+")'>編輯</button>"+
+      "<button onclick='toggleLocation("+l.id+")'>切換</button></td></tr>";
+    b.innerHTML+=tr;
+  }
+}
+function renderDepartments(){
+  var b=document.getElementById("departmentBody");b.innerHTML="";
+  for(var i=0;i<departments.length;i++){
+    var d=departments[i];
+    b.innerHTML+="<tr><td>"+d.company+"</td><td>"+d.locationName+"</td><td>"+d.code+"</td><td>"+d.name+
+      "</td><td>"+(d.active?"啟用":"停用")+"</td><td><button onclick='editDepartment("+d.id+")'>編輯</button>"+
+      "<button onclick='toggleDepartment("+d.id+")'>切換</button></td></tr>";
+  }
+}
+function renderJobs(){
+  var b=document.getElementById("jobBody");b.innerHTML="";
+  for(var i=0;i<jobs.length;i++){
+    var j=jobs[i];
+    b.innerHTML+="<tr><td>"+j.name+"</td><td>"+(j.active?"啟用":"停用")+
+      "</td><td><button onclick='editJob("+j.id+")'>編輯</button>"+
+      "<button onclick='toggleJob("+j.id+")'>切換</button></td></tr>";
   }
 }
 
-function closeLocationModal() {
-  document.getElementById("locationModal").style.display = "none";
-}
-
-/* Save (Create / Update) */
-function saveLocation() {
-  const company = document.getElementById("locCompany").value;
-  const name = document.getElementById("locName").value.trim();
-  const editId = document.getElementById("locEditId").value;
-
-  if (!name) {
-    alert("請輸入工作地點");
-    return;
-  }
-
-  if (editId) {
-    // update
-    locations = locations.map(l =>
-      l.id == editId ? { ...l, company, name } : l
-    );
-  } else {
-    // create
-    locations.push({
-      id: Date.now(),
-      company,
-      name,
-      active: true
-    });
-  }
-
-  localStorage.setItem("locations", JSON.stringify(locations));
-  closeLocationModal();
-  renderLocationTable();
-}
-
-/* Enable / Disable */
-function toggleLocation(id) {
-  locations = locations.map(l =>
-    l.id === id ? { ...l, active: !l.active } : l
-  );
-  localStorage.setItem("locations", JSON.stringify(locations));
-  renderLocationTable();
-}
-
-/* Render Table */
-function renderLocationTable() {
-  const tbody = document.getElementById("locationTableBody");
-  tbody.innerHTML = "";
-
-  locations.forEach(loc => {
-    const tr = document.createElement("tr");
-    tr.innerHTML =
-      "<td>" + loc.company + "</td>" +
-      "<td>" + loc.name + "</td>" +
-      "<td>" + (loc.active ? "✅ 啟用" : "⛔ 已停用") + "</td>" +
-      "<td>" +
-        "<button onclick='openLocationModalById(" + loc.id + ")'>編輯</button>" +
-        "<button onclick='toggleLocation(" + loc.id + ")'>" +
-          (loc.active ? "停用" : "啟用") +
-        "</button>" +
-      "</td>";
-    tbody.appendChild(tr);
-  });
-}
-
-function openLocationModalById(id) {
-  const loc = locations.find(l => l.id === id);
-  openLocationModal(loc);
-}
-
-/* Init */
-renderLocationTable();
-
-  /* =====================================================
-   ✅ Department – depends on Location
-   ===================================================== */
-
-let departments = JSON.parse(localStorage.getItem("departments")) || [];
-
-/* Modal Control */
-function openDepartmentModal(dept = null) {
-  document.getElementById("departmentModal").style.display = "flex";
-  document.getElementById("departmentModalTitle").innerText = dept ? "編輯部門" : "新增部門";
-
-  // populate location dropdown (only active)
-  const locSelect = document.getElementById("deptLocation");
-  locSelect.innerHTML = "";
-
-  locations.filter(l => l.active).forEach(l => {
-    const opt = document.createElement("option");
-    opt.value = l.id;
-    opt.text = l.name;
-    locSelect.appendChild(opt);
-  });
-
-  if (dept) {
-    document.getElementById("deptCompany").value = dept.company;
-    document.getElementById("deptLocation").value = dept.locationId;
-    document.getElementById("deptCode").value = dept.code;
-    document.getElementById("deptName").value = dept.name;
-    document.getElementById("deptEditId").value = dept.id;
-  } else {
-    document.getElementById("deptCompany").value = "KLN Logistics (HK) LTD.";
-    document.getElementById("deptCode").value = "";
-    document.getElementById("deptName").value = "";
-    document.getElementById("deptEditId").value = "";
-  }
-}
-
-function closeDepartmentModal() {
-  document.getElementById("departmentModal").style.display = "none";
-}
-
-/* Save */
-function saveDepartment() {
-  const company = deptCompany.value;
-  const locationId = Number(deptLocation.value);
-  const location = locations.find(l => l.id === locationId);
-  const code = deptCode.value.trim();
-  const name = deptName.value.trim();
-  const editId = deptEditId.value;
-
-  if (!code || !name) {
-    alert("請填寫完整部門資料");
-    return;
-  }
-
-  if (!/^[A-Za-z0-9]+$/.test(code)) {
-    alert("部門代碼只限英文及數字");
-    return;
-  }
-
-  if (editId) {
-    departments = departments.map(d =>
-      d.id == editId
-        ? { ...d, company, locationId, locationName: location.name, code, name }
-        : d
-    );
-  } else {
-    departments.push({
-      id: Date.now(),
-      company,
-      locationId,
-      locationName: location.name,
-      code,
-      name,
-      active: true
-    });
-  }
-
-  localStorage.setItem("departments", JSON.stringify(departments));
-  closeDepartmentModal();
-  renderDepartmentTable();
-}
-
-/* Enable / Disable */
-function toggleDepartment(id) {
-  departments = departments.map(d =>
-    d.id === id ? { ...d, active: !d.active } : d
-  );
-  localStorage.setItem("departments", JSON.stringify(departments));
-  renderDepartmentTable();
-}
-
-/* Render */
-function renderDepartmentTable() {
-  const tbody = document.getElementById("departmentTableBody");
-  tbody.innerHTML = "";
-
-  departments.forEach(d => {
-    const tr = document.createElement("tr");
-    tr.innerHTML =
-      "<td>" + d.company + "</td>" +
-      "<td>" + d.locationName + "</td>" +
-      "<td>" + d.code + "</td>" +
-      "<td>" + d.name + "</td>" +
-      "<td>" + (d.active ? "✅ 啟用" : "⛔ 已停用") + "</td>" +
-      "<td>" +
-        "<button onclick='openDepartmentModalById(" + d.id + ")'>編輯</button>" +
-        "<button onclick='toggleDepartment(" + d.id + ")'>" +
-          (d.active ? "停用" : "啟用") +
-        "</button>" +
-      "</td>";
-    tbody.appendChild(tr);
-  });
-}
-  
-function openDepartmentModalById(id) {
-  const dept = departments.find(d => d.id === id);
-  openDepartmentModal(dept);
-}
-
-
-/* Init */
-renderDepartmentTable();
-
-/* ================================
-   ✅ Job Type – Simple Dictionary
-   ================================ */
-
-let jobs = JSON.parse(localStorage.getItem("jobs")) || [];
-
-function openJobModal(job) {
-  document.getElementById("jobModal").style.display = "flex";
-  document.getElementById("jobModalTitle").innerText = job ? "編輯工種" : "新增工種";
-
-  if (job) {
-    jobName.value = job.name;
-    jobEditId.value = job.id;
-  } else {
-    jobName.value = "";
-    jobEditId.value = "";
-  }
-}
-
-function closeJobModal() {
-  document.getElementById("jobModal").style.display = "none";
-}
-
-function saveJob() {
-  const name = jobName.value.trim();
-  const editId = jobEditId.value;
-
-  if (!name) {
-    alert("請輸入工種名稱");
-    return;
-  }
-
-  if (editId) {
-    jobs = jobs.map(j => {
-      if (j.id == editId) {
-        return {
-          id: j.id,
-          name: name,
-          active: j.active
-        };
+/* ===== Location ===== */
+function openLocationModal(){locationModal.style.display="flex";locEditId.value="";}
+function closeLocationModal(){locationModal.style.display="none";}
+function saveLocation(){
+  if(locEditId.value){
+    for(var i=0;i<locations.length;i++){
+      if(locations[i].id==locEditId.value){
+        locations[i].company=locCompany.value;
+        locations[i].name=locName.value;
       }
-      return j;
-    });
-  } else {
-    jobs.push({
-      id: Date.now(),
-      name: name,
-      active: true
-    });
-  }
-
-  localStorage.setItem("jobs", JSON.stringify(jobs));
-  closeJobModal();
-  renderJobTable();
-}
-
-function toggleJob(id) {
-  jobs = jobs.map(j => {
-    if (j.id === id) {
-      return {
-        id: j.id,
-        name: j.name,
-        active: !j.active
-      };
     }
-    return j;
-  });
-
-  localStorage.setItem("jobs", JSON.stringify(jobs));
-  renderJobTable();
+  }else{
+    locations.push({id:Date.now(),company:locCompany.value,name:locName.value,active:true});
+  }
+  localStorage.setItem("locations",JSON.stringify(locations));
+  closeLocationModal();renderLocations();
+}
+function editLocation(id){
+  for(var i=0;i<locations.length;i++){
+    if(locations[i].id==id){
+      locCompany.value=locations[i].company;
+      locName.value=locations[i].name;
+      locEditId.value=id;
+      locationModal.style.display="flex";
+    }
+  }
+}
+function toggleLocation(id){
+  for(var i=0;i<locations.length;i++){
+    if(locations[i].id==id){locations[i].active=!locations[i].active;}
+  }
+  localStorage.setItem("locations",JSON.stringify(locations));renderLocations();
 }
 
-function renderJobTable() {
-  const tbody = document.getElementById("jobTableBody");
-  tbody.innerHTML = "";
-
-  jobs.forEach(j => {
-    const tr = document.createElement("tr");
-    tr.innerHTML =
-      "<td>" + j.name + "</td>" +
-      "<td>" + (j.active ? "✅ 啟用" : "⛔ 已停用") + "</td>" +
-      "<td>" +
-        "<button onclick='openJobModal(" + JSON.stringify(j) + ")'>編輯</button>" +
-        "<button onclick='toggleJob(" + j.id + ")'>" +
-          (j.active ? "停用" : "啟用") +
-        "</button>" +
-      "</td>";
-    tbody.appendChild(tr);
-  });
+/* ===== Department ===== */
+function openDepartmentModal(){
+  deptEditId.value="";
+  deptLocation.innerHTML="";
+  for(var i=0;i<locations.length;i++){
+    if(locations[i].active){
+      deptLocation.innerHTML+="<option value='"+locations[i].id+"'>"+locations[i].name+"</option>";
+    }
+  }
+  departmentModal.style.display="flex";
 }
-  
-function openJobModalById(id) {
-  const job = jobs.find(j => j.id === id);
-  openJobModal(job);
+function closeDepartmentModal(){departmentModal.style.display="none";}
+function saveDepartment(){
+  var locId=Number(deptLocation.value);
+  var locName="";
+  for(var i=0;i<locations.length;i++){if(locations[i].id==locId){locName=locations[i].name;}}
+  if(deptEditId.value){
+    for(var j=0;j<departments.length;j++){
+      if(departments[j].id==deptEditId.value){
+        departments[j].company=deptCompany.value;
+        departments[j].locationId=locId;
+        departments[j].locationName=locName;
+        departments[j].code=deptCode.value;
+        departments[j].name=deptName.value;
+      }
+    }
+  }else{
+    departments.push({id:Date.now(),company:deptCompany.value,locationId:locId,locationName:locName,code:deptCode.value,name:deptName.value,active:true});
+  }
+  localStorage.setItem("departments",JSON.stringify(departments));
+  closeDepartmentModal();renderDepartments();
+}
+function editDepartment(id){
+  for(var i=0;i<departments.length;i++){
+    if(departments[i].id==id){
+      openDepartmentModal();
+      deptCompany.value=departments[i].company;
+      deptCode.value=departments[i].code;
+      deptName.value=departments[i].name;
+      deptEditId.value=id;
+    }
+  }
+}
+function toggleDepartment(id){
+  for(var i=0;i<departments.length;i++){
+    if(departments[i].id==id){departments[i].active=!departments[i].active;}
+  }
+  localStorage.setItem("departments",JSON.stringify(departments));renderDepartments();
 }
 
+/* ===== Job ===== */
+function openJobModal(){jobEditId.value="";jobModal.style.display="flex";}
+function closeJobModal(){jobModal.style.display="none";}
+function saveJob(){
+  if(jobEditId.value){
+    for(var i=0;i<jobs.length;i++){
+      if(jobs[i].id==jobEditId.value){jobs[i].name=jobName.value;}
+    }
+  }else{
+    jobs.push({id:Date.now(),name:jobName.value,active:true});
+  }
+  localStorage.setItem("jobs",JSON.stringify(jobs));
+  closeJobModal();renderJobs();
+}
+function editJob(id){
+  for(var i=0;i<jobs.length;i++){
+    if(jobs[i].id==id){
+      jobName.value=jobs[i].name;
+      jobEditId.value=id;
+      jobModal.style.display="flex";
+    }
+  }
+}
+function toggleJob(id){
+  for(var i=0;i<jobs.length;i++){
+    if(jobs[i].id==id){jobs[i].active=!jobs[i].active;}
+  }
+  localStorage.setItem("jobs",JSON.stringify(jobs));renderJobs();
+}
 
-renderJobTable();
+/* ===== Init ===== */
+renderLocations();renderDepartments();renderJobs();
+</script>
 
 </body>
 </html>
