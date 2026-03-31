@@ -6,11 +6,11 @@ function login() {
 
   if (username === "admin" && password === "1234") {
     localStorage.setItem("role", "admin");
-    window.location.href = "admin/dashboard.html";
+    window.location.href = "./admin/dashboard.html";
   }
   else if (username === "user" && password === "1234") {
     localStorage.setItem("role", "user");
-    window.location.href = "user/dashboard.html";
+    window.location.href = "./user/dashboard.html";
   }
   else {
     document.getElementById("error").innerText = "帳號或密碼錯誤";
